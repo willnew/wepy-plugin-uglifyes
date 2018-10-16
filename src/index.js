@@ -10,17 +10,17 @@ export default class {
   }
 
   apply (op) {
-    const { output, file, code } = op;
+    const { output, next, file, code } = op;
     const { setting: { filter, options } } = this;
 
     if (filter.test(file)) {
       output && output({ file, action: '压缩' });
-      const result = uglify.minify(op.code, options);
+      const result = uglify.minify(code, options);
       for (let key in rst) {
         Object.assign(op, { key: rst[key] });
       }
     }
 
-    op.next();
+    next();
   }
 }
