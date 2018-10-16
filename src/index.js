@@ -1,35 +1,26 @@
 import path from 'path';
-import uglify from 'uglify-es';
+import uglify from 'uglify-js';
 
 export default class {
-  constructor(c = {}) {
-    const def = {
-      filter: new RegExp('\.(js)$'),
-      config: {
-        compress: {warnings: false}
-      }
-    };
-
-    this.setting = Object.assign({}, def, c);
+  constructor(config = {}) {
+    this.setting = Object.assign({}, {
+      filter: /\.js$/,
+      options: { fromString: true },
+    }, config);
   }
+
   apply (op) {
+    const { output, file, code } = op;
+    const { setting: { filter, options } } = this;
 
-    let setting = this.setting;
-
-    if (!setting.filter.test(op.file)) {
-      op.next();
-    } else {
-      //util.output('压缩', op.file);
-      op.output && op.output({
-        action: '压缩',
-        file: op.file
-      });
-      this.setting.config.fromString = true;
-      let rst = uglify.minify(op.code, this.setting.config);
-      let k;
-      for (k in rst)
-        op[k] = rst[k];
-      op.next();
+    if (filter.test(file)) {
+      output && output({ file, action: '压缩' });
+      const result = uglify.minify(op.code, options);
+      for (let key in rst) {
+        Object.assign(op, { key: rst[key] });
+      }
     }
+
+    op.next();
   }
 }

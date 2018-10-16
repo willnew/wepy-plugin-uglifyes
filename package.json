@@ -13,6 +13,6 @@
   "author": "will.liu90525@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "uglify-es": "^3.3.9"
+    "uglify-js": "^3.4.9"
   }
 }
