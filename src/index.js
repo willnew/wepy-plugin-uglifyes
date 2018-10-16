@@ -5,7 +5,7 @@ export default class {
   constructor(config = {}) {
     this.setting = Object.assign({}, {
       filter: /\.js$/,
-      options: { fromString: true },
+      options: {},
     }, config);
   }
 
